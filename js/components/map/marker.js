@@ -1,25 +1,23 @@
 class MapMarker extends HTMLElement {
-	initialAttributes = ['latitude', 'longitude', 'text']
-  constructor() {
-		super()
-		this.attachShadow({mode: 'open'})
-		this.setInitialAttributes()
-  }
+    initialAttributes = ['position', 'text']
+    constructor() {
+	super()
+	this.attachShadow({mode: 'open'})
+	this.setInitialAttributes()
+    }
 
-  connectedCallback() {}
+    connectedCallback() {}
 
-	setInitialAttributes = () => {
-		const values = this.initialAttributes.map(attr => this.getAttribute(attr))
-		const allAttrSet = values.filter(Boolean).length === this.initialAttributes.length
-
-		if (allAttrSet) {
-			this.initialAttributes.forEach(attr => {
-				this[attr] = this.getAttribute(attr)
-			})
-		} else {
-			console.log('Missing required attributes', this.initialAttributes)
-		}
+    setInitialAttributes = () => {
+	const position = JSON.parse(this.getAttribute('position'))
+	if (position && position.coordinates) {
+	    this.latitude = position.coordinates[0]
+	    this.longitude = position.coordinates[1]
 	}
+
+	this.text = this.getAttribute('text') || ''
+	console.log(this)
+    }
 }
 
 customElements.define('map-marker', MapMarker)
