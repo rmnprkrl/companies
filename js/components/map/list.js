@@ -41,11 +41,11 @@ class MapList extends HTMLElement {
 	this.shadowRoot.appendChild(template.content.cloneNode(true))
     }
 
-    setInitialPosition() {
-	const position = JSON.parse(this.getAttribute('position'))
-	if (position && position.coordinates) {
-	    this.latitude = position.coordinates[0]
-	    this.longitude = position.coordinates[1]
+   setInitialPosition() {
+       const position = JSON.parse(this.getAttribute('position'))
+       if (position && position.coordinates) {
+	   this.longitude = position.coordinates[0]
+	   this.latitude = position.coordinates[1]
 	}
     }
 
@@ -63,8 +63,6 @@ class MapList extends HTMLElement {
 	    })
 	    return item
 	})
-
-	console.log('markerData', markerData)
 
 	if (true || this.checkDependencies()) {
 	    this.renderLeaflet($component, markerData)
@@ -88,17 +86,17 @@ class MapList extends HTMLElement {
 
 	const iconUrl = 'data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
 
-	console.log('datix', markerData)
 	markerData.forEach(data => {
 	    var icon = L.icon({
 		iconUrl,
 		iconSize: [20, 20],
 		popupAnchor: [0, -15]
 	    })
-	    
-	    L.marker(data.position.coordinates, {icon})
-			.addTo(map)
-			.bindPopup(data.text)
+
+	    if (data.position) {
+		const [longitude, latitude] = data.position.coordinates
+		L.marker([latitude, longitude], {icon}).addTo(map).bindPopup(data.text)
+	    }
 	})
     }
 }
