@@ -11,4 +11,6 @@
     /* used in web components */
     --color-button-create: green;
     --color-button-create-brackground: transparent;
+
+    --size: 1rem;
 }
